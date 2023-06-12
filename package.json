@@ -1,0 +1,17 @@
+{
+  "name": "quiz-api-endpoints",
+  "version": "1.0.0",
+  "description": "This project contains Quiz Api Endpoints with Aunthentication and Authorization",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx nodemon server.js"
+  },
+  "author": "Dat Tech Guy",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.4",
+    "morgan": "^1.10.0"
+  }
+}
