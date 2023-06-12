@@ -5,6 +5,7 @@ app.use(express.json())
 app.use(morgan("dev"))
 app.use((req, res, next)=>{
     console.log("This LEON's Mildware👋")
+    next();
 })
 
 module.exports=app;
