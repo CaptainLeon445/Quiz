@@ -3,10 +3,11 @@ const mongoose=require("mongoose")
 
 // create user
 exports.createUser=async(req, res)=>{
+    const doc=await User.create(req.body)
     try{
         res.status(200).json({
             message:"success",
-            data:"Route is yet to be defined"
+            data: doc
         })
     }catch(err){
         res.status(400).json({
