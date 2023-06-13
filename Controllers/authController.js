@@ -1,3 +1,5 @@
+const { promisify }=require("util")
+const jwt=require("jsonwebtoken")
 const User = require("./../Models/userModel");
 const signInToken = require("./../utils/jwtToken");
 
@@ -19,7 +21,7 @@ exports.createUser = async (req, res) => {
     } catch (err) {
         res.status(400).json({
         message: "fail",
-        err,
+        err:err.message,
         });
     }
 };
@@ -56,7 +58,31 @@ exports.loginUser = async (req, res) => {
     } catch (err) {
         res.status(400).json({
         message: "fail",
-        err,
+        err:err.message,
         });
     }
+};
+
+// Protect routes
+exports.Protect= async (req, res, next) => {
+    let token;
+    // check if there is authorization token
+    if (req.headers.authorization || req.headers.authorization.startsWith("Bearer")){
+        token=req.headers.authorization.split(" ")[1]
+    }
+
+    if (!token){
+        res.status(400).json({
+            message: "fail",
+            err: "No token",
+        });
+    }
+    // decode the token
+    await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY)
+
+    // verify the token
+
+    // gain access with the token
+   
+    next();
 };
