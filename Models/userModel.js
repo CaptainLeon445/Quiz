@@ -37,6 +37,10 @@ const userSchema=mongoose.Schema({
             message: "The password confirm must be the same with password!" 
         }
     },
+    active:{
+        type: Boolean,
+        default: true
+    },
     createdAt:{
         type:Date,
         default:Date.now()

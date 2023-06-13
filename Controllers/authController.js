@@ -78,11 +78,13 @@ exports.Protect= async (req, res, next) => {
         });
     }
     // decode the token
-    await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY)
-
+    const decoded=await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY)
+    const user = await User.findById(decoded.id);
+    console.log(user)
+    req.user=user
     // verify the token
 
     // gain access with the token
-   
+
     next();
 };

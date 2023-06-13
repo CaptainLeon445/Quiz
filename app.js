@@ -7,10 +7,10 @@ const authRoutes=require("./Routes/authRoutes")
 
 
 
+app.use("/v1/api/auth", authRoutes)
+app.use("/v1/api/users", userRoutes)
 app.use("/v1/api/categories", categoryRoutes)
 app.use("/v1/api/questions", questionRoutes)
-app.use("/v1/api/users", userRoutes)
-app.use("/v1/api/auth", authRoutes)
 
 
 module.exports=app;

@@ -2,9 +2,11 @@ const User = require("./../Models/userModel");
 // get all the users
 exports.getAllUsers = async (req, res) => {
   try {
+    const doc=await User.find()
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      results: doc.length,
+      data: doc,
     });
   } catch (err) {
     res.status(400).json({
@@ -17,9 +19,11 @@ exports.getAllUsers = async (req, res) => {
 // get a user
 exports.getAUser = async (req, res) => {
   try {
+    const id= req.params.id
+    const doc=await User.findById(id)
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: doc,
     });
   } catch (err) {
     res.status(400).json({
@@ -32,9 +36,11 @@ exports.getAUser = async (req, res) => {
 // update the user
 exports.updateUser = async (req, res) => {
   try {
+    const id= req.params.id
+    const doc=await User.findByIdAndUpdate(id)
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: doc,
     });
   } catch (err) {
     res.status(400).json({
@@ -47,9 +53,11 @@ exports.updateUser = async (req, res) => {
 // delete the user
 exports.deleteUser = async (req, res) => {
   try {
+    const id= req.params.id
+    const doc=await User.findByIdAndDelete(id)
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: null,
     });
   } catch (err) {
     res.status(400).json({
@@ -60,11 +68,13 @@ exports.deleteUser = async (req, res) => {
 };
 
 // get me
-exports.getMe = async (req, res) => {
+exports.getAccount = async (req, res) => {
   try {
+    const id= req.user.id
+    const doc=await User.findById(id)
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: doc,
     });
   } catch (err) {
     res.status(400).json({
@@ -77,9 +87,15 @@ exports.getMe = async (req, res) => {
 // update me
 exports.updateMe = async (req, res) => {
   try {
+    const id= req.params.me
+    const content=req.body
+    const doc=await User.findByIdAndUpdate(id, content, {
+      new:true,
+      runValidators: true
+    })
     res.status(200).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: doc,
     });
   } catch (err) {
     res.status(400).json({
@@ -92,9 +108,12 @@ exports.updateMe = async (req, res) => {
 // delete me
 exports.deleteMe = async (req, res) => {
   try {
-    res.status(200).json({
+    const id= req.user.id
+    const content={ active: false }
+    await User.findByIdAndUpdate(id, content)
+    res.status(204).json({
       message: "success",
-      data: "Route is yet to be defined",
+      data: null,
     });
   } catch (err) {
     res.status(400).json({
