@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Questions = require("../Models/questionModel");
+const User = require("../Models/userModel");
 
 
 exports.createQuestion = async (req, res) => {
@@ -92,22 +93,32 @@ exports.deleteQuestion = async (req, res) => {
 
 exports.answerQuestion = async (req, res) => {
     try {
+      const user = await User.findById(req.params.userId).select("-password -passwordConfirm -createdAt -__v -email -active");
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
       const id = req.params.id;
+      const answer = req.body.answer;
       const doc = await Questions.findById(id);
-      const { answer } = req.body;
       if (answer.toLowerCase() === doc.answer.toLowerCase()) {
+        user.score += 4
+        await user.save()
         res.status(200).json({
           message: "correct",
+          data: user
         });
       } else {
+        user.score -= 1
+        await user.save()
         res.status(200).json({
-          message: "Incorret",
+          message: "Incorrect answer. Your score is deducted by 0ne.",
+          data: user
         });
       }
     } catch (err) {
       res.status(400).json({
         message: "fail",
-        err,
+        err:err.message,
       });
     }
   };

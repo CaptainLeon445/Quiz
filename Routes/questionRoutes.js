@@ -8,7 +8,7 @@ Router
     .get(getQuestions)
 Router.post("/:ctgId/set-question", createQuestion)
 Router.route("/:ctgId/my-question").get(Protect,getQuestion)
-Router.post("/:id/answer", answerQuestion)
+Router.post("/:userId/answer/:id", answerQuestion)
 Router
     .route("/:id")
     .patch(updateQuestion)

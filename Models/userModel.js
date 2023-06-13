@@ -17,7 +17,10 @@ const userSchema=mongoose.Schema({
         lowercase:true
 
     },
-    score: Number,
+    score: {
+        type: Number,
+        default: 0
+    },
     position:Number,
     password: {
         type: String,

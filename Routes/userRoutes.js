@@ -13,6 +13,6 @@ const { Protect }=require("../Controllers/authController")
 
 Router.route("/").get(getAllUsers);
 Router.route("/:id").get(getAUser).patch(updateUser).delete(deleteUser);
-Router.route("/account").get(Protect,getAccount).patch(updateMe).delete(Protect);
+Router.route("/account/:me").get(getAccount).patch(updateMe).delete(deleteMe);
 
 module.exports=Router;

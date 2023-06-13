@@ -108,7 +108,7 @@ exports.updateMe = async (req, res) => {
 // delete me
 exports.deleteMe = async (req, res) => {
   try {
-    const id= req.user.id
+    const id= req.params.me
     const content={ active: false }
     await User.findByIdAndUpdate(id, content)
     res.status(204).json({
