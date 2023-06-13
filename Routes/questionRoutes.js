@@ -5,8 +5,8 @@ const { getQuestions, createQuestion, answerQuestion, getQuestion, updateQuestio
 Router
     .route("/")
     .get(getQuestions)
-    .post(createQuestion)
-Router.get("/my-question", getQuestion)
+Router.post("/:ctgId/set-question", createQuestion)
+Router.get("/:ctgId/my-question", getQuestion)
 Router.post("/:id/answer", answerQuestion)
 Router
     .route("/:id")

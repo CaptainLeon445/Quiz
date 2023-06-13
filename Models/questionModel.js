@@ -9,11 +9,27 @@ const questionSchema=mongoose.Schema({
         type:String,
         trim: true
     },
-    category: String,
+    category: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Categories",
+        required:[true, "Questions must belong to a category"]
+    },
     createdAt:{
         type:Date,
         default:Date.now()
     }
+},
+{
+    toJSON: {virtuals: true},
+    toOject: {virtuals: true}
+})
+
+questionSchema.pre(/^find/, function(next){
+    this.populate({
+        path: "category",
+        select: "-__v -createdAt"
+    })
+    next();
 })
 
 const Questions=mongoose.model("Questions", questionSchema);

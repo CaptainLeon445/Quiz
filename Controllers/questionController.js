@@ -1,10 +1,29 @@
+const mongoose = require("mongoose");
 const Questions = require("../Models/questionModel");
+
 
 exports.createQuestion = async (req, res) => {
   try {
-    const doc = await Questions.create(req.body);
+    const content = req.body;
+    content.category = req.params.ctgId;
+    const doc = await Questions.create(content);
     res.status(200).json({
       message: "success",
+      data: doc,
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: "fail",
+      err:err.message,
+    });
+  }
+};
+exports.getQuestions = async (req, res) => {
+  try {
+    const doc = await Questions.find();
+    res.status(200).json({
+      message: "success",
+      results: doc.length,
       data: doc,
     });
   } catch (err) {
@@ -14,61 +33,30 @@ exports.createQuestion = async (req, res) => {
     });
   }
 };
-exports.getQuestions = async (req, res) => {
-    try {
-      const doc = await Questions.find();
-      res.status(200).json({
-          message: "success",
-          results: doc.length,
-          data: doc
-        });
-    }catch (err) {
-      res.status(400).json({
-        message: "fail",
-        err,
-      });
-    }
-  };
 exports.getQuestion = async (req, res) => {
   try {
-    // Get random documents
+    const obj = new mongoose.Types.ObjectId(req.params.ctgId)
     const doc = await Questions.aggregate([
-        { $sample: { size: 1 } 
-        }])
-        res.status(200).json({
-            message: "success",
-            data: doc,
-          })
-  } catch (err) {
-    res.status(400).json({
-      message: "fail",
-      err,
+        { 
+            $match: { category: obj }
+        },
+        {
+            $sample: { size : 1}
+        }
+    ]);
+    res.status(200).json({
+      message: "success",
+      data: doc,
     });
-}
-};
-exports.answerQuestion = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const doc = await Questions.findById(id);
-    const { answer } = req.body;
-    if (answer.toLowerCase() === doc.answer.toLowerCase()) {
-      res.status(200).json({
-        message: "correct",
-      });
-    } else {
-      res.status(200).json({
-        message: "Incorret",
-      });
-    }
   } catch (err) {
     res.status(400).json({
       message: "fail",
-      err,
+      err: err.message,
     });
   }
 };
 exports.updateQuestion = async (req, res) => {
-    try {
+  try {
     const id = req.params.id;
     const content = req.body;
     const doc = await Questions.findByIdAndUpdate(id, content, {
@@ -101,3 +89,25 @@ exports.deleteQuestion = async (req, res) => {
     });
   }
 };
+
+exports.answerQuestion = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const doc = await Questions.findById(id);
+      const { answer } = req.body;
+      if (answer.toLowerCase() === doc.answer.toLowerCase()) {
+        res.status(200).json({
+          message: "correct",
+        });
+      } else {
+        res.status(200).json({
+          message: "Incorret",
+        });
+      }
+    } catch (err) {
+      res.status(400).json({
+        message: "fail",
+        err,
+      });
+    }
+  };
