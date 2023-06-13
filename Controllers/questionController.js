@@ -93,7 +93,7 @@ exports.deleteQuestion = async (req, res) => {
 
 exports.answerQuestion = async (req, res) => {
     try {
-      const user = await User.findById(req.params.userId).select("-password -passwordConfirm -createdAt -__v -email -active");
+      const user = await User.findById(req.user.id).select("-password -passwordConfirm -createdAt -__v -email -active");
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }

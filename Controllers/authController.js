@@ -80,7 +80,6 @@ exports.Protect= async (req, res, next) => {
     // decode the token
     const decoded=await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY)
     const user = await User.findById(decoded.id);
-    console.log(user)
     req.user=user
     // verify the token
 
